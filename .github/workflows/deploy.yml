@@ -1,0 +1,36 @@
+name: Build and Deploy FastAPI
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch: 
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
+
+    - name: Set up Docker
+      uses: docker/setup-buildx-action@v2
+
+    - name: Build Docker image
+      run: |
+        docker compose build
+        docker images
+
+    - name: Run container (deploy/test)
+      run: |
+        docker compose up -d
+        sleep 10
+        curl -f http://localhost:8000 || (echo "❌ Test failed" && exit 1)
+
+    - name: Show logs
+      run: docker compose logs
+
+    - name: Tear down
+      if: always()
+      run: docker compose down
