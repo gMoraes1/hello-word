@@ -1,9 +1,16 @@
-version: '3.8'
 services:
   web:
     build: .
     ports:
       - "8000:8000"
-    # volumes:
-    #   - ./app:/app/app
+    command: sh -c "echo '🌐 Subindo FastAPI...' && uvicorn app.main:app --host 0.0.0.0 --port 8000"
+    restart: always
+
+  monitor:
+    build:
+      context: .
+      dockerfile: Dockerfile.monitor
+    command: sh -c "echo '🛠️ Subindo Monitor...' && python monitor.py"
+    depends_on:
+      - web
     restart: always
