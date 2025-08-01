@@ -31,7 +31,7 @@ fastapi-hello/
 
 ### 1️⃣ Clone o repositório
 ```bash
-git clone <seu-repo>
+git clone <https://github.com/gMoraes1/hello-word.git>
 cd fastapi-hello
 ```
 
@@ -41,27 +41,41 @@ docker compose up --build
 ```
 
 Isso vai iniciar:
-- **web** → API FastAPI, mostrando um print do seu iniciamento no terminal  
-- **monitor** → Script de monitoramento, mostra um print do monitor iniciando
+
+- **web** → API FastAPI, mostrando um print do seu iniciamento no terminal.  
+- **monitor** → Script de monitoramento, que acessa o serviço web pelo hostname `web` e mostra prints do monitor iniciando e ciclos de monitoramento.
 
 ### 3️⃣ Acesse a API
 - [http://localhost:8000](http://localhost:8000)  
 - [http://localhost:8000/docs](http://localhost:8000/docs) (Swagger)
 
 ### 4️⃣ Verifique os logs
+Para ver os logs dos dois containers juntos:
 ```bash
 docker compose logs -f
 ```
-O monitor vai registrar mensagens no terminal e também em `monitor.log`.
+
+Para ver os logs do monitor separadamente (recomendado para monitoramento):
+```bash
+docker compose logs -f monitor
+```
+
+O monitor vai registrar mensagens no terminal e também em `monitor.log` dentro do container.
 
 ---
 
 ## 🧪 Testar localmente sem Docker
-Se quiser rodar o monitor local:
+Se quiser rodar o monitor localmente (fora do container), instale as dependências:
 ```bash
-pip install -r requirements.txt psutil requests
-python3 monitor_all.py
+pip install -r requirements.txt
 ```
+
+E execute:
+```bash
+python3 monitor_.py
+```
+
+⚠️ **Lembre-se que nesse modo, o monitor deve usar `http://localhost:8000` para acessar a API, enquanto dentro do container o endereço é `http://web:8000`.**
 
 ---
 
@@ -84,10 +98,10 @@ python3 monitor_all.py
 
 ```
 [2025-07-29 21:32:01] 🚀 Iniciando monitoramento...
-[2025-07-29 21:32:02] [OK] Endpoint http://localhost:8000 está respondendo.
+[2025-07-29 21:32:02] [OK] Endpoint http://web:8000 está respondendo.
 [2025-07-29 21:32:02] [OK] CPU: 12.34%
 [2025-07-29 21:32:02] [OK] RAM: 142.56 MB
-[2025-07-29 21:32:07] [ALERTA] Falha ao acessar http://localhost:8000: Connection refused
+[2025-07-29 21:32:07] [ALERTA] Falha ao acessar http://web:8000: Connection refused
 ```
 
 ---
