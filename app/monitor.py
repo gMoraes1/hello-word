@@ -3,12 +3,13 @@ import psutil
 import requests
 from datetime import datetime
 
+
 class Monitor:
     def __init__(self, url, log_file="monitor.log", cpu_alert=80.0, ram_alert=500):
         self.url = url
         self.log_file = log_file
         self.cpu_alert = cpu_alert
-        self.ram_alert = ram_alert * 1024 * 1024  # MB -> bytes
+        self.ram_alert = ram_alert * 1024 * 1024  
 
     def log(self, message):
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -47,10 +48,12 @@ class Monitor:
     def run(self, interval=5):
         self.log("🚀 Iniciando monitoramento...")
         while True:
+            self.log("🔄 Novo ciclo de monitoramento iniciado")
             self.check_health()
             self.check_resources()
             time.sleep(interval)
 
 if __name__ == "__main__":
-    monitor = Monitor(url="http://localhost:8000")
+    monitor = Monitor(url="http://web:8000")
+    print("Monitor iniciado")
     monitor.run(interval=5)

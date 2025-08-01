@@ -2,8 +2,8 @@ FROM python:3.9-slim
 
 WORKDIR /app
 
-COPY /app/monitor.py . 
+COPY /app/monitor.py .
 RUN pip install psutil requests
 
+CMD ["python", "-u", "monitor.py"]
 
-CMD sh -c "echo 'Iniciando monitor...' && python monitor.py"
